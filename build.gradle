@@ -1,0 +1,85 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply from: 'version.gradle'
+
+android {
+    compileSdkVersion 27
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 27
+        versionCode extVersionCode
+        versionName extVersionName
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+    signingConfigs {
+        release {
+            keyAlias 'kg'
+            keyPassword KG_KEY_PASSWORD
+            storeFile file(KG_KEY_PATH)
+            storePassword KG_STORE_PASSWORD
+        }
+    }
+    buildTypes {
+        release {
+            //minifyEnabled true
+            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            versionNameSuffix '-debug'
+        }
+    }
+    flavorDimensions "gscore"
+}
+
+dependencies {
+    // Android support libraries
+    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.android.support:support-v4:27.0.2'
+    implementation 'com.android.support:design:27.0.2'
+
+    // Kotlin and its dependencies
+    implementation ("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version") {
+        exclude group: 'org.jetbrains', module: 'annotations'
+    }
+    implementation 'com.github.salomonbrys.kodein:kodein:4.1.0'
+    implementation 'nl.komponents.kovenant:kovenant-core:3.3.0'
+    implementation 'nl.komponents.kovenant:kovenant-android:3.3.0'
+
+    // UI libraries
+    implementation ('com.github.ozodrukh:CircularReveal:2.0.1@aar')
+
+    // Test dependencies
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+}
+
+buildscript {
+    ext.kotlin_version = '1.2.21'
+    repositories {
+        mavenCentral()
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://jitpack.io"
+    }
+    jcenter()
+    google()
+}
