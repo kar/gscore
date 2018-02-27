@@ -49,10 +49,10 @@ class WelcomeDialogManager (
                 dialogGuide.show()
                 displaying = true
             }
-            version.code() < currentAppVersion && step in listOf(0, 3)-> {
+            version.previousCode() < currentAppVersion && step in listOf(0, 3)-> {
                 dialogUpdate.listener = { accept ->
                     displaying = false
-                    if (accept == 1) version.code %= currentAppVersion
+                    if (accept == 1) version.previousCode %= currentAppVersion
                     welcome.optionalSeen %= false
                     run(step = 4)
                 }

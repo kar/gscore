@@ -7,7 +7,7 @@ import gs.kar.BuildConfig
 abstract class Version {
         abstract val appName: IProperty<String>
         abstract val name: IProperty<String>
-        abstract val code: IProperty<Int>
+        abstract val previousCode: IProperty<Int>
         abstract val nameCore: IProperty<String>
 }
 
@@ -18,6 +18,6 @@ class VersionImpl (
 
         override val appName = newProperty(kctx, { "gs" })
         override val name = newProperty(kctx, { "0.0" })
-        override val code = newPersistedProperty(kctx, BasicPersistence(xx, "version_code"), { 0 })
+        override val previousCode = newPersistedProperty(kctx, BasicPersistence(xx, "previous_code"), { 0 })
         override val nameCore = newProperty(kctx, { BuildConfig.VERSION_NAME })
 }
