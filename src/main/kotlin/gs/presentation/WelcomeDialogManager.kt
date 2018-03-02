@@ -136,7 +136,7 @@ class WelcomeDialogManager (
         val dialog = SimpleDialog(ctx, R.layout.webview, additionalButton = R.string.welcome_optional)
         dialog.view.minimumHeight = ctx.resources.toPx(480)
         optionalActor = WebViewActor(dialog.view, welcome.optionalUrl, forceEmbedded = true,
-                reloadOnError = true, javascript = true)
+                javascript = true)
         dialog
     }
 
