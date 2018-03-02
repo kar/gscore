@@ -12,6 +12,8 @@ abstract class Welcome {
     abstract val optionalShow: IProperty<Boolean>
     abstract val optionalUrl: IProperty<URL>
     abstract val optionalSeen: IProperty<Boolean>
+    abstract val ctaUrl: IProperty<URL>
+    abstract val ctaSeenCounter: IProperty<Int>
     abstract val updatedUrl: IProperty<URL>
     abstract val advanced: IProperty<Boolean>
     abstract val obsoleteUrl: IProperty<URL>
@@ -31,6 +33,8 @@ class WelcomeImpl (
     override val optionalShow = newProperty(w, { false })
     override val optionalUrl = newProperty(w, { URL("http://localhost") })
     override val optionalSeen = newPersistedProperty(w, BasicPersistence(xx, "optional_seen"), { false })
+    override val ctaUrl = newProperty(w, { URL("http://localhost") })
+    override val ctaSeenCounter = newPersistedProperty(w, BasicPersistence(xx, "cta_seen"), { 3 })
     override val updatedUrl = newProperty(w, { URL("http://localhost") })
     override val advanced = newPersistedProperty(w, BasicPersistence(xx, "advanced"), { false })
     override val obsoleteUrl = newProperty(w, { URL("http://localhost") })
@@ -38,7 +42,4 @@ class WelcomeImpl (
     override val cleanupUrl = newProperty(w, { URL("http://localhost") })
     override val conflictingBuilds = newProperty(w, { listOf<String>() })
 
-    override fun toString(): String {
-        return "WelcomeImpl(introUrl=$introUrl, introSeen=$introSeen, guideUrl=$guideUrl, guideSeen=$guideSeen, optionalShow=$optionalShow, optionalUrl=$optionalUrl, optionalSeen=$optionalSeen, updatedUrl=$updatedUrl, advanced=$advanced, obsoleteUrl=$obsoleteUrl, obsolete=$obsolete, cleanupUrl=$cleanupUrl, conflictingBuilds=$conflictingBuilds)"
-    }
 }

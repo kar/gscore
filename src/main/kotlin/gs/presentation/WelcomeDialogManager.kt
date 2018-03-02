@@ -54,6 +54,7 @@ class WelcomeDialogManager (
                     displaying = false
                     if (accept == 1) version.previousCode %= currentAppVersion
                     welcome.optionalSeen %= false
+                    welcome.ctaSeenCounter %= 0
                     run(step = 4)
                 }
                 dialogUpdate.show()
@@ -68,6 +69,15 @@ class WelcomeDialogManager (
                     run(step = 5)
                 }
                 dialogOptional.show()
+                displaying = true
+            }
+            step == 0 && welcome.ctaSeenCounter() > 0 -> welcome.ctaSeenCounter %= welcome.ctaSeenCounter() - 1
+            step == 0 && welcome.ctaSeenCounter() == 0 -> {
+                dialogCta.listener = { button ->
+                    displaying = false
+                    if (button != null) welcome.ctaSeenCounter %= 5
+                }
+                dialogCta.show()
                 displaying = true
             }
             welcome.obsolete() -> dialogObsolete.show()
@@ -131,6 +141,12 @@ class WelcomeDialogManager (
     }
 
     private var optionalActor: WebViewActor? = null
+
+    private val dialogCta by lazy {
+        val dialog = SimpleDialog(ctx, R.layout.webview)
+        WebViewActor(dialog.view, welcome.ctaUrl, reloadOnError = true)
+        dialog
+    }
 
     private val dialogUpdate by lazy {
         val dialog = SimpleDialog(ctx, R.layout.webview)
