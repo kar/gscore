@@ -2,6 +2,7 @@ package gs.presentation
 
 import android.content.Intent
 import android.net.Uri
+import android.view.View
 import android.webkit.WebView
 import gs.kar.R
 import gs.property.IProperty
@@ -10,20 +11,23 @@ import java.net.URL
 
 
 class WebViewActor(
-        private val parent: android.view.View,
+        private val dialog: SimpleDialog?,
         private val url: IProperty<URL>,
+        private val parent: View? = null,
         private val forceEmbedded: Boolean = false,
         private val reloadOnError: Boolean = false,
-        private val javascript: Boolean = false
+        private val javascript: Boolean = false,
+        private val showDialog: Boolean = false
 ) {
 
     private val RELOAD_ERROR_MILLIS = 5 * 1000L
 
-    private val web: WebView = parent.findViewById(R.id.web_view) as WebView
+    private val web: WebView = (dialog?.view ?: parent!!).findViewById(R.id.web_view) as WebView
     private val handler: android.os.Handler
     private var loaded = false
     private var reloadCounter = 0
     private var listener: IWhen? = null
+    private var shown = false
 
     init {
         web.visibility = android.view.View.INVISIBLE
@@ -50,7 +54,7 @@ class WebViewActor(
                 } else {
                     val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url))
                     intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
-                    try { parent.context.startActivity(intent) } catch (e: Exception) {}
+                    try { (dialog?.view ?: parent!!).context.startActivity(intent) } catch (e: Exception) {}
                     return true
                 }
             }
@@ -69,6 +73,10 @@ class WebViewActor(
             override fun onPageFinished(view: android.webkit.WebView?, url2: String?) {
                 if (loaded) {
                     web.visibility = android.view.View.VISIBLE
+                    if (showDialog && dialog != null && !shown) {
+                        shown = true
+                        dialog.show()
+                    }
                 }
             }
         }
@@ -93,7 +101,7 @@ class WebViewActor(
         val intent = Intent(Intent.ACTION_VIEW)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.setData(Uri.parse(url().toString()))
-        parent.context.startActivity(intent)
+        (dialog?.view ?: parent!!).context.startActivity(intent)
     }
 
     private fun handleError(url: String?) {

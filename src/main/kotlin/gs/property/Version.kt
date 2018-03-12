@@ -9,6 +9,7 @@ abstract class Version {
         abstract val name: IProperty<String>
         abstract val previousCode: IProperty<Int>
         abstract val nameCore: IProperty<String>
+        abstract val obsolete: IProperty<Boolean>
 }
 
 class VersionImpl (
@@ -20,4 +21,5 @@ class VersionImpl (
         override val name = newProperty(kctx, { "0.0" })
         override val previousCode = newPersistedProperty(kctx, BasicPersistence(xx, "previous_code"), { 0 })
         override val nameCore = newProperty(kctx, { BuildConfig.VERSION_NAME })
+        override val obsolete = newProperty(kctx, { false })
 }

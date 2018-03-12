@@ -27,7 +27,7 @@ class RepoImpl(
 
     private val j: Journal by xx.instance()
     private val time: Time by xx.instance()
-    private val welcome: Welcome by xx.instance()
+    private val version: Version by xx.instance()
 
     override val url = newPersistedProperty(kctx, BasicPersistence(xx, "repo_url"), zeroValue = { "" })
 
@@ -56,7 +56,7 @@ class RepoImpl(
         } catch (e: Exception) {
 //            j.event(Events.REPO_CHECK_FAIL)
             if (e is java.io.FileNotFoundException) {
-                welcome.obsolete %= true
+                version.obsolete %= true
             }
             throw e
         }

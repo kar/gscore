@@ -81,7 +81,8 @@ class TopBarView(
         }
 
         fromActive {}
-        mode = gs.presentation.TopBarView.Mode.BAR
+        back.translationX = -180f
+        mode = Mode.BAR
     }
 
     private fun rotate(view: android.view.View, how: Float, after: () -> Unit) {
@@ -110,7 +111,7 @@ class TopBarView(
             header.visibility = android.view.View.GONE
         }
 
-        back.animate().setDuration(dur).translationX(-140f)
+        back.animate().setDuration(dur).translationX(-180f)
 
         actions.forEach { action ->
             action.animate().translationX(50f).alpha(0f)
@@ -131,7 +132,7 @@ class TopBarView(
         header.visibility = android.view.View.VISIBLE
         header.animate().translationX(0f).alpha(1f)
 
-        back.animate().setDuration(dur).translationX(-140f)
+        back.animate().setDuration(dur).translationX(-180f)
 
         actions.forEach { action ->
             action.animate().translationX(0f).alpha(1f)
@@ -146,7 +147,7 @@ class TopBarView(
         a.duration = 300
         a.interpolator = android.view.animation.DecelerateInterpolator()
         logo.startAnimation(a)
-        logo.animate().setDuration(dur).translationX(-200f).doAfter {
+        logo.animate().setDuration(dur).translationX(-240f).doAfter {
             logo.visibility = android.view.View.GONE
         }
 
