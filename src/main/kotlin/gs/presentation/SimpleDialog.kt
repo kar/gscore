@@ -2,7 +2,7 @@ package gs.presentation
 
 import android.app.Activity
 import com.github.salomonbrys.kodein.instance
-import gs.environment.ActivityProvider
+import gs.environment.ComponentProvider
 import gs.environment.Journal
 import gs.environment.inject
 import gs.kar.R
@@ -13,7 +13,7 @@ class SimpleDialog(
         private val continueButton: Int? = null,
         private val additionalButton: Int? = null
 ) {
-    private val activity by lazy { ctx.inject().instance<ActivityProvider<Activity>>() }
+    private val activity by lazy { ctx.inject().instance<ComponentProvider<Activity>>() }
     private val j by lazy { ctx.inject().instance<Journal>() }
     private val themedContext by lazy { android.view.ContextThemeWrapper(ctx, R.style.GsTheme_Dialog) }
     val view = android.view.LayoutInflater.from(themedContext).inflate(viewId, null, false)

@@ -1,6 +1,5 @@
 package gs.environment
 
-import android.app.Activity
 import android.app.AlarmManager
 import android.app.DownloadManager
 import android.app.NotificationManager
@@ -43,10 +42,10 @@ fun canShowNotification(last: Long, env: Time, cooldownMillis: Long): Boolean {
 }
 
 /**
- * ActivityProvider wraps activity context in a weak reference in order to deliver it to interested
+ * ComponentProvider wraps activity context in a weak reference in order to deliver it to interested
  * parties while not leaking it.
  */
-class ActivityProvider<T: Activity> : LazyProvider<T>()
+class ComponentProvider<T: Context> : LazyProvider<T>()
 
 open class LazyProvider<T> {
     private var value: WeakReference<T>? = null
