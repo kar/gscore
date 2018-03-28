@@ -1,5 +1,8 @@
 package gs.property
 
+import java.io.BufferedReader
+import java.io.FileReader
+
 /**
  * Finds a reliable path to store persistence under.
  *
@@ -30,13 +33,9 @@ fun saveToCache(hosts: Collection<String>, cache: java.io.File) {
     if (w.checkError()) throw Exception("could not save cache")
 }
 
-fun readFromCache(cache: java.io.File): List<String> {
-    val hosts = mutableListOf<String>()
-    val s = java.util.Scanner(cache).useDelimiter("\n")
-    while (s.hasNext()) {
-        hosts.add(s.next())
-    }
-    return hosts
+fun readFromCache(cache: java.io.File): Set<String> {
+    val bf = BufferedReader(FileReader(cache))
+    return bf.lineSequence().toSet()
 }
 
 fun isCacheValid(cache: java.io.File, ttlMillis: Long, nowMillis: Long): Boolean {
