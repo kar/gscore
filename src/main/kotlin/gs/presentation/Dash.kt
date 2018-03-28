@@ -24,6 +24,11 @@ interface Dash {
     fun detach(view: View)
 }
 
+interface CallbackDash : Dash {
+    fun onAttached(attached: () -> Unit)
+    fun onDetached(detached: () -> Unit)
+}
+
 typealias On = Boolean
 
 abstract class ViewDash(

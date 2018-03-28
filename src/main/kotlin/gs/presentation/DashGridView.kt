@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 
-class AGridView(
+class DashGridView(
         ctx: android.content.Context,
         attributeSet: android.util.AttributeSet
 ) : android.support.v7.widget.RecyclerView(ctx, attributeSet) {

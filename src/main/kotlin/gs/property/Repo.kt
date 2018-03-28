@@ -32,17 +32,21 @@ class RepoImpl(
     override val url = newPersistedProperty(kctx, BasicPersistence(xx, "repo_url"), zeroValue = { "" })
 
     init {
-        url.doWhenSet().then { content.refresh(force = true) }
+        url.doWhenSet().then {
+            j.log("repo: url set: ${url()}")
+            content.refresh(force = true)
+        }
     }
 
     private val repoRefresh = {
+        j.log("repo: refresh: start")
         val repoURL = java.net.URL(url())
         val fetchTimeout = 10 * 10000
 
         try {
-//            j.event(Events.REPO_CHECK_START)
             val repo = gs.environment.load({ openUrl(repoURL, fetchTimeout) })
             val locales = repo[1].split(" ").map { java.util.Locale(it) }
+            j.log("repo: refresh: downloaded")
 
             lastRefreshMillis %= time.now()
             RepoContent(
@@ -54,8 +58,9 @@ class RepoImpl(
                     fetchedUrl = url()
             )
         } catch (e: Exception) {
-//            j.event(Events.REPO_CHECK_FAIL)
+            j.log("repo: refresh: fail", e)
             if (e is java.io.FileNotFoundException) {
+                j.log("repo: obsolete", e)
                 version.obsolete %= true
             }
             throw e

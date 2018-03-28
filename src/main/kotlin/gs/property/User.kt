@@ -1,7 +1,7 @@
 package gs.property
 
 import android.content.Context
-import com.github.salomonbrys.kodein.instance
+import com.github.salomonbrys.kodein.*
 import gs.environment.*
 
 abstract class User {
@@ -17,4 +17,10 @@ class UserImpl (
 
     override val identity = newPersistedProperty(kctx, AIdentityPersistence(ctx), { identityFrom("") })
 
+}
+
+fun newUserModule(ctx: Context): Kodein.Module {
+    return Kodein.Module {
+        bind<User>() with singleton { UserImpl(kctx = with("gscore").instance(), xx = lazy) }
+    }
 }

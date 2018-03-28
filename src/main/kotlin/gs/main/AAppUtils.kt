@@ -15,7 +15,8 @@ internal fun registerUncaughtExceptionHandler(ctx: android.content.Context) {
     val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
     Thread.setDefaultUncaughtExceptionHandler { thread, ex ->
         gs.main.restartApplicationThroughService(ctx, 2000)
-        defaultHandler.uncaughtException(thread, ex)
+//        defaultHandler.uncaughtException(thread, ex)
+        System.exit(2)
     }
 }
 

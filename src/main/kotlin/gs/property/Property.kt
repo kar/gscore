@@ -363,8 +363,7 @@ private class PersistedProperty<T>(
         private val shouldRefresh: (value: T) -> Boolean = { false }
 ): BaseProperty<T>(
         kctx = kctx,
-        zeroValue = zeroValue,
-        init = { persistence.read(zeroValue()) },
+        zeroValue = { persistence.read(zeroValue()) },
         refresh = refresh ?: { persistence.read(it) },
         shouldRefresh = shouldRefresh
 ) {
