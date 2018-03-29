@@ -140,6 +140,7 @@ class WebDash(
     private fun handleError(url: String?, reason: Exception) {
         try {
             j.log("WebDash: load failed: $url", reason)
+            clean = false
             if (!reloadOnError) return
             if (reloadCounter++ <= 10) loader.sendEmptyMessageDelayed(0, RELOAD_ERROR_MILLIS)
         } catch (e: Exception) {}
