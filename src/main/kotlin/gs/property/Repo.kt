@@ -45,7 +45,15 @@ class RepoImpl(
 
         try {
             val repo = gs.environment.load({ openUrl(repoURL, fetchTimeout) })
-            val locales = repo[1].split(" ").map { java.util.Locale(it) }
+            val locales = repo[1].split(" ").map {
+                // Because Java APIs suck
+                val parts = it.split("_")
+                when(parts.size) {
+                    3 -> Locale(parts[0], parts[1], parts[2])
+                    2 -> Locale(parts[0], parts[1])
+                    else -> Locale(parts[0])
+                }
+            }
             j.log("repo: refresh: downloaded")
 
             lastRefreshMillis %= time.now()

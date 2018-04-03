@@ -5,8 +5,10 @@ import android.content.res.Resources
 import com.github.salomonbrys.kodein.instance
 import com.github.salomonbrys.kodein.with
 import gs.environment.Environment
+import gs.environment.Journal
 import gs.environment.Worker
 import gs.main.getPreferredLocales
+import java.util.*
 
 abstract class I18n {
     abstract val locale: IProperty<String>
@@ -24,7 +26,8 @@ typealias Localised = String
 
 class I18nImpl (
         private val kctx: Worker,
-        private val xx: Environment
+        private val xx: Environment,
+        private val j: Journal = xx().instance()
 ) : I18n() {
 
     private val ctx: Context by xx.instance()
@@ -39,20 +42,24 @@ class I18nImpl (
             refresh = {
                 val preferred = getPreferredLocales()
                 val available = repo.content().locales
+                j.log("locale: refresh", "preferred/available", preferred, available)
 
                 /**
-                 * Since pulling in proper locale lookup would take a lot of code dependencies, for now
-                 * I coded up something dead simple. If no exact match is found amoung available locales,
-                 * try matching just the language tag. This isn't a nice approach, but since we will support
-                 * only the main languages for a long time to come, it should do the job.
+                 * Try matching exactly, if not, try matching by language tag. Use order of preferred
+                 * locales defined by user.
                  */
-                val exact = preferred.firstOrNull { available.contains(it) }
-                val tag = if (exact == null) {
-                    val langs = preferred.map { it.language }.distinct()
-                    val lang = langs.firstOrNull { available.map { it.language }.contains(it) }
-                    lang ?: "en"
-                } else exact.toString()
-                tag
+                val matches = preferred.asSequence().map {
+                    val justLanguageTag = Locale(it.language)
+                    val tagAndCountry = Locale(it.language, it.country)
+                    when {
+                        available.contains(it) -> it
+                        available.contains(tagAndCountry) -> tagAndCountry
+                        available.contains(justLanguageTag) -> justLanguageTag
+                        else -> null
+                    }
+                }.filterNotNull()
+                j.log("locale: refresh: matches", matches.toList())
+                matches.first().toString()
             })
 
     private val localisedMap: MutableMap<LanguageTag, MutableMap<Key, Localised>> = mutableMapOf()
