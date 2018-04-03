@@ -48,6 +48,7 @@ class I18nImpl (
                  * Try matching exactly, if not, try matching by language tag. Use order of preferred
                  * locales defined by user.
                  */
+                val availableLanguageTags = available.map { Locale(it.language) to it }.toMap()
                 val matches = preferred.asSequence().map {
                     val justLanguageTag = Locale(it.language)
                     val tagAndCountry = Locale(it.language, it.country)
@@ -55,6 +56,7 @@ class I18nImpl (
                         available.contains(it) -> it
                         available.contains(tagAndCountry) -> tagAndCountry
                         available.contains(justLanguageTag) -> justLanguageTag
+                        availableLanguageTags.containsKey(justLanguageTag) -> availableLanguageTags[justLanguageTag]
                         else -> null
                     }
                 }.filterNotNull()
