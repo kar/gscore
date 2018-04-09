@@ -61,7 +61,7 @@ class I18nImpl (
                     }
                 }.filterNotNull()
                 j.log("locale: refresh: matches", matches.toList())
-                matches.first().toString()
+                (matches.firstOrNull() ?: Locale("en")).toString()
             })
 
     private val localisedMap: MutableMap<LanguageTag, MutableMap<Key, Localised>> = mutableMapOf()
