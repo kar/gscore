@@ -23,7 +23,7 @@ abstract class Device {
     abstract val watchdogOn: IProperty<Boolean>
 
     fun isWaiting(): Boolean {
-        return !connected() || tethering()
+        return !connected()
     }
 
 }
