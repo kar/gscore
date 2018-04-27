@@ -1,6 +1,36 @@
+buildscript {
+    ext.kotlin_version = '1.2.31'
+    repositories {
+        mavenCentral()
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+plugins {
+    id 'com.gladed.androidgitversion' version '0.4.3'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://jitpack.io"
+    }
+    jcenter()
+    google()
+}
+
+androidGitVersion {
+    codeFormat 'MNNPPPPBB'
+    format '%tag%'
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply from: 'version.gradle'
 
 android {
     compileSdkVersion 27
@@ -8,11 +38,9 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode extVersionCode
-        versionName extVersionName
-
+        versionName androidGitVersion.name()
+        versionCode androidGitVersion.code()
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -60,26 +88,4 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-}
-
-buildscript {
-    ext.kotlin_version = '1.2.31'
-    repositories {
-        mavenCentral()
-        google()
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
-repositories {
-    mavenCentral()
-    maven {
-        url "https://jitpack.io"
-    }
-    jcenter()
-    google()
 }
