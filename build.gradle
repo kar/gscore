@@ -25,7 +25,7 @@ repositories {
 }
 
 androidGitVersion {
-    codeFormat 'MNNPPPPBB'
+    codeFormat 'MNNPPPPPP'
     format '%tag%'
 }
 
